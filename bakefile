@@ -1,0 +1,7 @@
+output   = output/index.html
+template = "templates/template.html"
+host     = "https://roqueando.com"
+author = roqueando
+lang     = pt_BR
+hash     = true
+date     = "%d %a %b %I%p"

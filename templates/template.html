@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <title>roqueando</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="blog pessoal do roqueando">
+    <meta name="author" content="roqueando">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>roqueando</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+
+    <link
+      rel="stylesheet"
+      href="css/style.css"
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/dist/css/bulma-extensions.min.css">
+  </head>
+
+  <body>
+    <section class="hero is-fullheight">
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <p id="#title" class="title" style="font-family: 'League Spartan'; font-size: 100px; font-weight: 900; letter-spacing: -6px">roqueando</p>
+          <p class="subtitle">
+            <a href="https://github.com/roqueando" class="button is-light is-black">github</a>
+            <a href="https://bsky.app/profile/roqueando.com" class="button is-light is-black">bluesky</a>
+            <a href="https://twitter.com/roqeando" class="button is-light is-black">twitter</a>
+            <a href="https://www.linkedin.com/in/vitor-roque-2b3290179/" class="button is-light is-black">linkedin</a>
+          </p>
+          <p class="subtitle">
+            <a href="#posts" class="button is-dark">posts</a>
+          </p>
+        </div>
+      </div>
+
+    </section>
+    <div class="section page" id="posts">
+    {
+      <div class="box">
+        <p class="card-header-title title">{title}</p>
+        <div class="media-content">
+          <p class="subtitle">{author} - {date}</p>
+          <div class="content hidden-content" id="{id}">
+            {content}
+            <br />
+          </div>
+        </div>
+        <footer class="card-footer">
+          <button class="card-footer-item read_more" data-id="{id}">ler mais</button>
+        </footer>
+      </div>
+        <!--
+    <div class="post" id="{id}">
+        <div class="title">{title}
+        <a class="permalink" title="Permanent link to the {title} post." href="{link}">Π</a>
+        <div class="date">{date}</div>
+      </div>
+      <div class="content">
+        {content}
+      </div>
+
+      ~{author}
+    </div>
+-->
+    }
+  </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-quickview/dist/js/bulma-quickview.min.js"></script>
+    <script src="js/post.js">
+    </script>
+  </body>
+</html>

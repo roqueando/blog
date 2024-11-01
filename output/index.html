@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <title>roqueando</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="blog pessoal do roqueando">
+    <meta name="author" content="roqueando">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>roqueando</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+
+    <link
+      rel="stylesheet"
+      href="css/style.css"
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/dist/css/bulma-extensions.min.css">
+  </head>
+
+  <body>
+    <section class="hero is-fullheight">
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <p id="#title" class="title" style="font-family: 'League Spartan'; font-size: 100px; font-weight: 900; letter-spacing: -6px">roqueando</p>
+          <p class="subtitle">
+            <a href="https://github.com/roqueando" class="button is-light is-black">github</a>
+            <a href="https://bsky.app/profile/roqueando.com" class="button is-light is-black">bluesky</a>
+            <a href="https://twitter.com/roqeando" class="button is-light is-black">twitter</a>
+            <a href="https://www.linkedin.com/in/vitor-roque-2b3290179/" class="button is-light is-black">linkedin</a>
+          </p>
+          <p class="subtitle">
+            <a href="#posts" class="button is-dark">posts</a>
+          </p>
+        </div>
+      </div>
+
+    </section>
+    <div class="section page" id="posts">
+    
+      <div class="box">
+        <p class="card-header-title title">configurando um project C++ com CMake</p>
+        <div class="media-content">
+          <p class="subtitle">osogyian - 01 Fri Nov 12AM</p>
+          <div class="content hidden-content" id="18110162035832212839">
+            <h1>Introdução</h1>
+
+<p>Nesse artigo vou mostrar o básico de como eu venho estruturando meus projetos C++ com o CMake, e também algumas dicas.</p>
+
+<h2>CMakeLists.txt - o &ldquo;requirements.txt&rdquo; do C++</h2>
+
+<p>Todo projeto CMake ele precisa conter esse arquivo CMakeLists.txt exatamente como está escrito, ele é o arquivo de instruções sobre: o que é o projeto, descrição, versionamento, como vai especificar os links e entre outras features que o CMake proporciona.</p>
+
+<p>Caso queira saber mais, dá uma olhada nessa <a href="https://cmake.org/cmake/help/latest/">documentação da ferramenta</a>.</p>
+
+<h2>Estruturação do arquivo raíz</h2>
+
+<p>Pra começar uma estrutura básica nós podemos escrever sobre o que é o projeto em si.
+&ldquo;cmake
+cmake<em>minimum</em>required(VERSION 3.14)</p>
+
+<p>set(YOUR<em>PROJECT</em>NAME your<em>project)
+set(YOUR</em>SOURCE<em>DIR src)
+set(YOUR</em>SOURCE ${YOUR<em>SOURCE</em>DIR}/main.cpp)
+set(CMAKE<em>CXX</em>STANDARD 23)
+set(CMAKE<em>CXX</em>STANDARD<em>REQUIRED ON)
+set(YOUR</em>PROJECT<em>VERSION 0.1)
+set(YOUR</em>LIBRARY<em>NAME your</em>project)
+set(YOUR<em>BINARY</em>NAME your_project-bin)</p>
+
+<p>project(
+  ${YOUR<em>PROJECT</em>NAME}
+  VERSION ${YOUR<em>PROJECT</em>VERSION}
+  DESCRIPTION &quot;Your project description&rdquo;
+  LANGUAGES CXX)
+&ldquo;</p>
+
+<ul>
+<li><p>Primeiro definimos a versão mínima para rodar o cmake.</p></li>
+<li><p>Essa seção de set é um pouco opcional mas eu vejo como uma boa prática pois evita de ficar reescrevendo valores em outros arquivos como este, e vamos ter mais de um arquivo CMakeLists.txt. </p>
+
+<ul>
+<li>Além dessas váriaveis como nome do projeto ou diretório do código-fonte, existem alguns que são palavras-chave do CMake, como: CMAKE<em>CXX</em>STANDARD que diz quão ISO ele vai usar para compilar o projeto, e o CMAKE<em>CXX</em>STANDARD_REQUIRED que vai se auto explica.</li>
+</ul></li>
+<li><p>Essa função project monta os dados base do seu projeto, utilizando os set anteriores para construir váriaveis importantes no CMake como PROJECT_NAME.</p></li>
+</ul>
+
+<h2>Criando executáveis</h2>
+
+<p>Em projetos C++ é muito comum termos executáveis e com isso podemos dizer para o CMake como queremos que ele seja montado e com quais bibliotecas queremos que ele seja feito o link.</p>
+
+<p>&rdquo;cmake
+add<em>executable(${YOUR</em>BINARY_NAME} src/main.cpp)</p>
+
+<p>target<em>link</em>libraries(${YOUR<em>BINARY</em>NAME} PUBLIC ${YOUR<em>LIBRARY</em>NAME})</p>
+
+<p>add_directory(src)
+&ldquo;</p>
+
+<ul>
+<li><p>Essa função add_executable é bem simples de entender, ela recebe o nome do executável e qual é o arquivo responsável.</p>
+
+<ul>
+<li> Caso queira mais de um executáveis, apenas chame essa função com o nome de outro executável e seu respectivo arquivo .cpp</li>
+</ul></li>
+<li><p>A função target<em>link</em>libraries linka seu executável com a sua biblioteca.</p>
+
+<ul>
+<li>No meu caso eu mantenho como padrão ter uma biblioteca <em>core</em> na qual ela terá as dependencias corretas.</li>
+</ul></li>
+<li><p>A função add_directory adiciona o diretório src para a instrução de compilação dizendo que queremos ler o arquivo CMakeLists.txt dessa pasta.</p></li>
+</ul>
+
+<h2>Biblioteca</h2>
+
+<p>Como disse um pouco acima, normalmente eu crio uma biblioteca <em>core</em> para que ela seja a responsável de organizar meu código enquanto o main.cpp é responsável por usar esse código.Com isso temos agora duas pastas, uma pasta src que vai ter a implementação do seu projeto, e uma pasta include onde vai ter seus arquivos <em>header</em>:
+&rdquo;txt
+~/your_project</p>
+
+<p>├── CMakeLists.txt
+├── include/
+│   └── your<em>library/
+├── src/
+│   ├── CMakeLists.txt
+│   ├── your</em>library_impl/
+│   └── main.cpp
+&ldquo;</p>
+
+<p>Na pasta src vai conter o arquivo de instruções com esse modelo:</p>
+
+<p>&rdquo;cmake
+file(GLOB HEADER<em>LIST
+  CONFIGURE</em>DEPENDS &ldquo;${PROJECT<em>SOURCE</em>DIR}/include/<strong>/*.hpp&rdquo;)
+file(GLOB SOURCE<em>LIST &ldquo;${PROJECT</em>SOURCE_DIR}/src/</strong>/*.cpp&rdquo;)</p>
+
+<p>add<em>library(${YOUR</em>LIBRARY<em>NAME} ${SOURCE</em>LIST} ${HEADER<em>LIST})
+target</em>include<em>directories(${YOUR</em>LIBRARY_NAME} PUBLIC ../include)
+&ldquo;</p>
+
+<p>Na primeira parte onde é chamado as funções file, é gerado uma lista de arquivos e armazenado nas respectivas variáveis HEADER<em>LIST e SOURCE</em>LIST. </p>
+
+<p>A função add_library pega essas listas e linka com a sua biblioteca. Em seguida as funções de target vai incluir o diretório include (que são seus headers).</p>
+
+<h3>FetchContent e seu milagroso gerenciador de dependências</h3>
+
+<p>Uma das maiores dúvidas em projetos C++ modernos é que ele não vem com gerenciadores de pacotes/dependências como cargo para Rust, pip para Python ou poder instalar posteriormente como o composer para PHP.</p>
+
+<p>Com isso a comunidade do C++ tem uma forma máis fácil de organizar isso: &quot;Apenas baixe a biblioteca e aponte no seu código&rdquo;, porém isso fica um pouco inviável se a base de código tem muitas dependências. Então o CMake tem uma função perfeita pra isso chamada <a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">FetchContent</a> na qual você só precisa adicionar o nome da biblioteca, o repositório dela e a tag.</p>
+
+<p>Um exemplo com a lib argparse:
+&ldquo;cmake
+FetchContent<em>Declare(
+  argparse
+  GIT</em>REPOSITORY https://github.com/p-ranav/argparse.git
+  GIT_TAG v3.0
+)</p>
+
+<p>FetchContent_MakeAvailable(argparse)
+&rdquo;</p>
+
+<p>Em seguida você só precisa linkar o target da sua biblioteca com a dependência instalada:</p>
+
+<p>&ldquo;cmake
+target<em>link</em>libraries(${YOUR<em>LIBRARY</em>NAME} argparse::argparse)
+&rdquo;</p>
+
+<h3>Testes</h3>
+
+<p>Obviamente CMake suporta testes com o comando ctest e a forma de configurar os testes segue o mesmo padrão. Uma pasta de testes e um CMakeLists.txt para as instruções de como compilar seus testes.</p>
+
+<p>&ldquo;cmake
+file(GLOB TEST<em>LIST &rdquo;${CMAKE</em>CURRENT<em>SOURCE</em>DIR}/*.cpp&quot;)</p>
+
+<p>FetchContent<em>Declare(
+  googletest
+  GIT</em>REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG v1.14.0
+)</p>
+
+<p>FetchContent_MakeAvailable(googletest)
+&ldquo;</p>
+
+<p>Da mesma forma que os arquivos header foram colocados numa lista, os arquivos de testes são uma lista de arquivos .cpp dentro da pasta de testes.</p>
+
+<p>Aqui eu optei pelo googletest, que é um framework de testes unitários. É bem simples de usar e você pode encontrar mais detalhes na <a href="https://google.github.io/googletest/">documentação</a> do framework.</p>
+
+<p>Depois de usar o FetchContent para disponibilizar o framework de testes, é necessário linkar com os testes que irão ser executados. Para isso seguimos com a mesma instrução porém adicionando um executável tests.</p>
+
+<p>&rdquo;cmake
+add<em>executable(tests ${TEST</em>LIST})
+target<em>link</em>libraries(tests PRIVATE ${YOUR<em>LIBRARY</em>NAME} GTest::gtest<em>main)
+add</em>test(NAME tests COMMAND tests WORKING<em>DIRECTORY ${CMAKE</em>CURRENT<em>SOURCE</em>DIR})</p>
+
+<p>include(GoogleTest)
+&ldquo;</p>
+
+<p>Note que foi adicionado uma função add_test direcionando qual o comando/executavel precisa ser executado e qual o diretório de trabalho atual (para os casos que o projeto possua fixtures ou arquivos de testes). A função de include carrega os arquivos CMake internos do framework googletest.</p>
+
+<h3>Dicas</h3>
+
+<p>Uma dica muito interessante é adicionar um POST BUILD para seu projeto, na qual ele vai certificar que tudo que todo seu código está em funcionamento. A comunidade C++ trata os testes como uma parte do projeto, pra term a máxima confiança que suas funcionalidades estão corretas e funcionais. Pra isso você precisa adicionar uma função add<em>custom</em>command do tipo POST_BUILD.</p>
+
+<p>&rdquo;cmake
+add<em>custom</em>command(
+    TARGET tests
+    POST<em>BUILD
+    COMMAND ${CMAKE</em>CTEST<em>COMMAND} &ndash;output-on-failure
+    WORKING</em>DIRECTORY ${CMAKE<em>BINARY</em>DIR}
+    COMMENT &ldquo;Running tests&hellip;&rdquo;
+)
+&ldquo;
+Isso fará com que toda vez que você fazer o build do seu projeto ela vai rodar os testes em seguida, assim seus testes só irão rodar se seu build passar, e como é um POST_BUILD, os seus testes fazem parte do build, logo caso falhem, seu build é falho também.</p>
+
+<h2>Makefile, automatizando tudo</h2>
+
+<p>Para finalizar uma boa prática é usar o Makefile para não ter que ficar rodando o CMake toda vez, pra isso crie um arquivo Makefile, e seu projeto deve estar com essa aparência:</p>
+
+<p>&rdquo;txt
+~/your<em>project
+├── CMakeLists.txt
+├── Makefile
+├── include/
+│   └── your</em>library/
+├── src/
+│   ├── CMakeLists.txt
+│   └── main.cpp
+└── tests
+    ├── CMakeLists.txt
+    └── your_test.cpp
+&ldquo;</p>
+
+<p>Se você não sabe como funciona um Makefile, é bem simples, você precisa de uma &quot;ação&rdquo; e definir qual os comandos que ela precisa executar. Pra saber mais só dar uma olhada nesse <a href="https://makefiletutorial.com">tutorial</a>, é bem explicativo.</p>
+
+<p>Um exemplo de como esse projeto usaria um Makefile:
+&ldquo;Makefile
+TARGET = your_project
+BUILDDIR = build</p>
+
+<p>run: $(BUILDDIR)/Makefile
+    @cd $(BUILDDIR) &amp;&amp; ./$(TARGET)</p>
+
+<p>test: $(BUILDDIR)/Makefile
+    @cd $(BUILDDIR) &amp;&amp; ctest &ndash;output-on-failure &ndash;gtest<em>catch</em>exceptions=0</p>
+
+<p>build: $(BUILDDIR)/Makefile
+    @$(MAKE) -C $(BUILDDIR)</p>
+
+<p>$(BUILDDIR)/Makefile:
+    @mkdir -p $(BUILDDIR)
+    @cd $(BUILDDIR) &amp;&amp; cmake ..</p>
+
+<p>clean:
+    @$(MAKE) -C $(BUILDDIR) clean
+    @rm -rf $(BUILDDIR)
+&rdquo;</p>
+
+<p>Depois de declarar algumas váriaveis que serão utilizadas, temos alguns comandos como run, test e build. Sabendo disso alguns desses comandos dependem do build, pois sem ele nada seria compilado e poderíamos testar ou rodar nosso binário.</p>
+
+<p>Nota-se que o $(BUILDDIR)/Makefile é um comando também, que gera a pasta build e roda o CMake para gerar o esqueleto do diretório de build, e criar o Makefile padão do CMake, que é o arquivo gerado automaticamente pela ferramenta baseada nas instruções do CMakeLists.txt. Com isso é possível usar esse comando como pré-requisito para os outros, dando assim uma autonomia para o comando run por exemplo, rodar antes de tudo um build.</p>
+
+<p>Esses pré-requesitos também faz com que só permita executar o comando desejado caso tiver alguma alteração no Makefile gerado pelo CMake.</p>
+
+<h2>Conclusão</h2>
+
+<p>Com tudo montado você terá um projeto base com um dos build system mais usado no mercado, com direito a build baseado em testes unitários. Essa base é usada pelo projeto de <a href="/articles/armazen-part-1">banco de dados para logs</a> que estou criando. </p>
+
+<p>Até a próxima! O ṣeun 👋</p>
+
+            <br />
+          </div>
+        </div>
+        <footer class="card-footer">
+          <button class="card-footer-item read_more" data-id="18110162035832212839">ler mais</button>
+        </footer>
+      </div>
+        <!--
+    <div class="post" id="18110162035832212839">
+        <div class="title">configurando um project C++ com CMake
+        <a class="permalink" title="Permanent link to the configurando um project C++ com CMake post." href="https://roqueando.com/index.html#18110162035832212839">Π</a>
+        <div class="date">01 Fri Nov 12AM</div>
+      </div>
+      <div class="content">
+        <h1>Introdução</h1>
+
+<p>Nesse artigo vou mostrar o básico de como eu venho estruturando meus projetos C++ com o CMake, e também algumas dicas.</p>
+
+<h2>CMakeLists.txt - o &ldquo;requirements.txt&rdquo; do C++</h2>
+
+<p>Todo projeto CMake ele precisa conter esse arquivo CMakeLists.txt exatamente como está escrito, ele é o arquivo de instruções sobre: o que é o projeto, descrição, versionamento, como vai especificar os links e entre outras features que o CMake proporciona.</p>
+
+<p>Caso queira saber mais, dá uma olhada nessa <a href="https://cmake.org/cmake/help/latest/">documentação da ferramenta</a>.</p>
+
+<h2>Estruturação do arquivo raíz</h2>
+
+<p>Pra começar uma estrutura básica nós podemos escrever sobre o que é o projeto em si.
+&ldquo;cmake
+cmake<em>minimum</em>required(VERSION 3.14)</p>
+
+<p>set(YOUR<em>PROJECT</em>NAME your<em>project)
+set(YOUR</em>SOURCE<em>DIR src)
+set(YOUR</em>SOURCE ${YOUR<em>SOURCE</em>DIR}/main.cpp)
+set(CMAKE<em>CXX</em>STANDARD 23)
+set(CMAKE<em>CXX</em>STANDARD<em>REQUIRED ON)
+set(YOUR</em>PROJECT<em>VERSION 0.1)
+set(YOUR</em>LIBRARY<em>NAME your</em>project)
+set(YOUR<em>BINARY</em>NAME your_project-bin)</p>
+
+<p>project(
+  ${YOUR<em>PROJECT</em>NAME}
+  VERSION ${YOUR<em>PROJECT</em>VERSION}
+  DESCRIPTION &quot;Your project description&rdquo;
+  LANGUAGES CXX)
+&ldquo;</p>
+
+<ul>
+<li><p>Primeiro definimos a versão mínima para rodar o cmake.</p></li>
+<li><p>Essa seção de set é um pouco opcional mas eu vejo como uma boa prática pois evita de ficar reescrevendo valores em outros arquivos como este, e vamos ter mais de um arquivo CMakeLists.txt. </p>
+
+<ul>
+<li>Além dessas váriaveis como nome do projeto ou diretório do código-fonte, existem alguns que são palavras-chave do CMake, como: CMAKE<em>CXX</em>STANDARD que diz quão ISO ele vai usar para compilar o projeto, e o CMAKE<em>CXX</em>STANDARD_REQUIRED que vai se auto explica.</li>
+</ul></li>
+<li><p>Essa função project monta os dados base do seu projeto, utilizando os set anteriores para construir váriaveis importantes no CMake como PROJECT_NAME.</p></li>
+</ul>
+
+<h2>Criando executáveis</h2>
+
+<p>Em projetos C++ é muito comum termos executáveis e com isso podemos dizer para o CMake como queremos que ele seja montado e com quais bibliotecas queremos que ele seja feito o link.</p>
+
+<p>&rdquo;cmake
+add<em>executable(${YOUR</em>BINARY_NAME} src/main.cpp)</p>
+
+<p>target<em>link</em>libraries(${YOUR<em>BINARY</em>NAME} PUBLIC ${YOUR<em>LIBRARY</em>NAME})</p>
+
+<p>add_directory(src)
+&ldquo;</p>
+
+<ul>
+<li><p>Essa função add_executable é bem simples de entender, ela recebe o nome do executável e qual é o arquivo responsável.</p>
+
+<ul>
+<li> Caso queira mais de um executáveis, apenas chame essa função com o nome de outro executável e seu respectivo arquivo .cpp</li>
+</ul></li>
+<li><p>A função target<em>link</em>libraries linka seu executável com a sua biblioteca.</p>
+
+<ul>
+<li>No meu caso eu mantenho como padrão ter uma biblioteca <em>core</em> na qual ela terá as dependencias corretas.</li>
+</ul></li>
+<li><p>A função add_directory adiciona o diretório src para a instrução de compilação dizendo que queremos ler o arquivo CMakeLists.txt dessa pasta.</p></li>
+</ul>
+
+<h2>Biblioteca</h2>
+
+<p>Como disse um pouco acima, normalmente eu crio uma biblioteca <em>core</em> para que ela seja a responsável de organizar meu código enquanto o main.cpp é responsável por usar esse código.Com isso temos agora duas pastas, uma pasta src que vai ter a implementação do seu projeto, e uma pasta include onde vai ter seus arquivos <em>header</em>:
+&rdquo;txt
+~/your_project</p>
+
+<p>├── CMakeLists.txt
+├── include/
+│   └── your<em>library/
+├── src/
+│   ├── CMakeLists.txt
+│   ├── your</em>library_impl/
+│   └── main.cpp
+&ldquo;</p>
+
+<p>Na pasta src vai conter o arquivo de instruções com esse modelo:</p>
+
+<p>&rdquo;cmake
+file(GLOB HEADER<em>LIST
+  CONFIGURE</em>DEPENDS &ldquo;${PROJECT<em>SOURCE</em>DIR}/include/<strong>/*.hpp&rdquo;)
+file(GLOB SOURCE<em>LIST &ldquo;${PROJECT</em>SOURCE_DIR}/src/</strong>/*.cpp&rdquo;)</p>
+
+<p>add<em>library(${YOUR</em>LIBRARY<em>NAME} ${SOURCE</em>LIST} ${HEADER<em>LIST})
+target</em>include<em>directories(${YOUR</em>LIBRARY_NAME} PUBLIC ../include)
+&ldquo;</p>
+
+<p>Na primeira parte onde é chamado as funções file, é gerado uma lista de arquivos e armazenado nas respectivas variáveis HEADER<em>LIST e SOURCE</em>LIST. </p>
+
+<p>A função add_library pega essas listas e linka com a sua biblioteca. Em seguida as funções de target vai incluir o diretório include (que são seus headers).</p>
+
+<h3>FetchContent e seu milagroso gerenciador de dependências</h3>
+
+<p>Uma das maiores dúvidas em projetos C++ modernos é que ele não vem com gerenciadores de pacotes/dependências como cargo para Rust, pip para Python ou poder instalar posteriormente como o composer para PHP.</p>
+
+<p>Com isso a comunidade do C++ tem uma forma máis fácil de organizar isso: &quot;Apenas baixe a biblioteca e aponte no seu código&rdquo;, porém isso fica um pouco inviável se a base de código tem muitas dependências. Então o CMake tem uma função perfeita pra isso chamada <a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">FetchContent</a> na qual você só precisa adicionar o nome da biblioteca, o repositório dela e a tag.</p>
+
+<p>Um exemplo com a lib argparse:
+&ldquo;cmake
+FetchContent<em>Declare(
+  argparse
+  GIT</em>REPOSITORY https://github.com/p-ranav/argparse.git
+  GIT_TAG v3.0
+)</p>
+
+<p>FetchContent_MakeAvailable(argparse)
+&rdquo;</p>
+
+<p>Em seguida você só precisa linkar o target da sua biblioteca com a dependência instalada:</p>
+
+<p>&ldquo;cmake
+target<em>link</em>libraries(${YOUR<em>LIBRARY</em>NAME} argparse::argparse)
+&rdquo;</p>
+
+<h3>Testes</h3>
+
+<p>Obviamente CMake suporta testes com o comando ctest e a forma de configurar os testes segue o mesmo padrão. Uma pasta de testes e um CMakeLists.txt para as instruções de como compilar seus testes.</p>
+
+<p>&ldquo;cmake
+file(GLOB TEST<em>LIST &rdquo;${CMAKE</em>CURRENT<em>SOURCE</em>DIR}/*.cpp&quot;)</p>
+
+<p>FetchContent<em>Declare(
+  googletest
+  GIT</em>REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG v1.14.0
+)</p>
+
+<p>FetchContent_MakeAvailable(googletest)
+&ldquo;</p>
+
+<p>Da mesma forma que os arquivos header foram colocados numa lista, os arquivos de testes são uma lista de arquivos .cpp dentro da pasta de testes.</p>
+
+<p>Aqui eu optei pelo googletest, que é um framework de testes unitários. É bem simples de usar e você pode encontrar mais detalhes na <a href="https://google.github.io/googletest/">documentação</a> do framework.</p>
+
+<p>Depois de usar o FetchContent para disponibilizar o framework de testes, é necessário linkar com os testes que irão ser executados. Para isso seguimos com a mesma instrução porém adicionando um executável tests.</p>
+
+<p>&rdquo;cmake
+add<em>executable(tests ${TEST</em>LIST})
+target<em>link</em>libraries(tests PRIVATE ${YOUR<em>LIBRARY</em>NAME} GTest::gtest<em>main)
+add</em>test(NAME tests COMMAND tests WORKING<em>DIRECTORY ${CMAKE</em>CURRENT<em>SOURCE</em>DIR})</p>
+
+<p>include(GoogleTest)
+&ldquo;</p>
+
+<p>Note que foi adicionado uma função add_test direcionando qual o comando/executavel precisa ser executado e qual o diretório de trabalho atual (para os casos que o projeto possua fixtures ou arquivos de testes). A função de include carrega os arquivos CMake internos do framework googletest.</p>
+
+<h3>Dicas</h3>
+
+<p>Uma dica muito interessante é adicionar um POST BUILD para seu projeto, na qual ele vai certificar que tudo que todo seu código está em funcionamento. A comunidade C++ trata os testes como uma parte do projeto, pra term a máxima confiança que suas funcionalidades estão corretas e funcionais. Pra isso você precisa adicionar uma função add<em>custom</em>command do tipo POST_BUILD.</p>
+
+<p>&rdquo;cmake
+add<em>custom</em>command(
+    TARGET tests
+    POST<em>BUILD
+    COMMAND ${CMAKE</em>CTEST<em>COMMAND} &ndash;output-on-failure
+    WORKING</em>DIRECTORY ${CMAKE<em>BINARY</em>DIR}
+    COMMENT &ldquo;Running tests&hellip;&rdquo;
+)
+&ldquo;
+Isso fará com que toda vez que você fazer o build do seu projeto ela vai rodar os testes em seguida, assim seus testes só irão rodar se seu build passar, e como é um POST_BUILD, os seus testes fazem parte do build, logo caso falhem, seu build é falho também.</p>
+
+<h2>Makefile, automatizando tudo</h2>
+
+<p>Para finalizar uma boa prática é usar o Makefile para não ter que ficar rodando o CMake toda vez, pra isso crie um arquivo Makefile, e seu projeto deve estar com essa aparência:</p>
+
+<p>&rdquo;txt
+~/your<em>project
+├── CMakeLists.txt
+├── Makefile
+├── include/
+│   └── your</em>library/
+├── src/
+│   ├── CMakeLists.txt
+│   └── main.cpp
+└── tests
+    ├── CMakeLists.txt
+    └── your_test.cpp
+&ldquo;</p>
+
+<p>Se você não sabe como funciona um Makefile, é bem simples, você precisa de uma &quot;ação&rdquo; e definir qual os comandos que ela precisa executar. Pra saber mais só dar uma olhada nesse <a href="https://makefiletutorial.com">tutorial</a>, é bem explicativo.</p>
+
+<p>Um exemplo de como esse projeto usaria um Makefile:
+&ldquo;Makefile
+TARGET = your_project
+BUILDDIR = build</p>
+
+<p>run: $(BUILDDIR)/Makefile
+    @cd $(BUILDDIR) &amp;&amp; ./$(TARGET)</p>
+
+<p>test: $(BUILDDIR)/Makefile
+    @cd $(BUILDDIR) &amp;&amp; ctest &ndash;output-on-failure &ndash;gtest<em>catch</em>exceptions=0</p>
+
+<p>build: $(BUILDDIR)/Makefile
+    @$(MAKE) -C $(BUILDDIR)</p>
+
+<p>$(BUILDDIR)/Makefile:
+    @mkdir -p $(BUILDDIR)
+    @cd $(BUILDDIR) &amp;&amp; cmake ..</p>
+
+<p>clean:
+    @$(MAKE) -C $(BUILDDIR) clean
+    @rm -rf $(BUILDDIR)
+&rdquo;</p>
+
+<p>Depois de declarar algumas váriaveis que serão utilizadas, temos alguns comandos como run, test e build. Sabendo disso alguns desses comandos dependem do build, pois sem ele nada seria compilado e poderíamos testar ou rodar nosso binário.</p>
+
+<p>Nota-se que o $(BUILDDIR)/Makefile é um comando também, que gera a pasta build e roda o CMake para gerar o esqueleto do diretório de build, e criar o Makefile padão do CMake, que é o arquivo gerado automaticamente pela ferramenta baseada nas instruções do CMakeLists.txt. Com isso é possível usar esse comando como pré-requisito para os outros, dando assim uma autonomia para o comando run por exemplo, rodar antes de tudo um build.</p>
+
+<p>Esses pré-requesitos também faz com que só permita executar o comando desejado caso tiver alguma alteração no Makefile gerado pelo CMake.</p>
+
+<h2>Conclusão</h2>
+
+<p>Com tudo montado você terá um projeto base com um dos build system mais usado no mercado, com direito a build baseado em testes unitários. Essa base é usada pelo projeto de <a href="/articles/armazen-part-1">banco de dados para logs</a> que estou criando. </p>
+
+<p>Até a próxima! O ṣeun 👋</p>
+
+      </div>
+
+      ~osogyian
+    </div>
+-->
+    
+      <div class="box">
+        <p class="card-header-title title">post2</p>
+        <div class="media-content">
+          <p class="subtitle">osogyian - 31 Thu Oct 11PM</p>
+          <div class="content hidden-content" id="15441434477586531886">
+            <p>+++
+title = &ldquo;novo post&rdquo;
+description = &ldquo;como funciona um dos build systems mais utilizados no mercado e em projetos open source&rdquo;
+author = &ldquo;roqueando&rdquo;
+url = &lsquo;/articles/setting-up-cpp-project&rsquo;
++++</p>
+
+<h1>Introdução POST NOVO</h1>
+
+<p>Nesse artigo vou mostrar o básico de como eu venho estruturando meus projetos C++ com o CMake, e também algumas dicas.</p>
+
+<h2>CMakeLists.txt - o &ldquo;requirements.txt&rdquo; do C++</h2>
+
+<p>Todo projeto CMake ele precisa conter esse arquivo CMakeLists.txt exatamente como está escrito, ele é o arquivo de instruções sobre: o que é o projeto, descrição, versionamento, como vai especificar os links e entre outras features que o CMake proporciona.</p>
+
+<p>Caso queira saber mais, dá uma olhada nessa <a href="https://cmake.org/cmake/help/latest/">documentação da ferramenta</a>.</p>
+
+            <br />
+          </div>
+        </div>
+        <footer class="card-footer">
+          <button class="card-footer-item read_more" data-id="15441434477586531886">ler mais</button>
+        </footer>
+      </div>
+        <!--
+    <div class="post" id="15441434477586531886">
+        <div class="title">post2
+        <a class="permalink" title="Permanent link to the post2 post." href="https://roqueando.com/index.html#15441434477586531886">Π</a>
+        <div class="date">31 Thu Oct 11PM</div>
+      </div>
+      <div class="content">
+        <p>+++
+title = &ldquo;novo post&rdquo;
+description = &ldquo;como funciona um dos build systems mais utilizados no mercado e em projetos open source&rdquo;
+author = &ldquo;roqueando&rdquo;
+url = &lsquo;/articles/setting-up-cpp-project&rsquo;
++++</p>
+
+<h1>Introdução POST NOVO</h1>
+
+<p>Nesse artigo vou mostrar o básico de como eu venho estruturando meus projetos C++ com o CMake, e também algumas dicas.</p>
+
+<h2>CMakeLists.txt - o &ldquo;requirements.txt&rdquo; do C++</h2>
+
+<p>Todo projeto CMake ele precisa conter esse arquivo CMakeLists.txt exatamente como está escrito, ele é o arquivo de instruções sobre: o que é o projeto, descrição, versionamento, como vai especificar os links e entre outras features que o CMake proporciona.</p>
+
+<p>Caso queira saber mais, dá uma olhada nessa <a href="https://cmake.org/cmake/help/latest/">documentação da ferramenta</a>.</p>
+
+      </div>
+
+      ~osogyian
+    </div>
+-->
+    
+  </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-quickview/dist/js/bulma-quickview.min.js"></script>
+    <script src="js/post.js">
+    </script>
+  </body>
+</html>
+

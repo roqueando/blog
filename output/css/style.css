@@ -1,0 +1,26 @@
+[data-theme=dark],
+.theme-dark {
+  /* Update CSS variables */
+  background-color: #333;
+  #title {
+    color: #f1efe7;
+  }
+}
+
+
+[data-theme=light],
+.theme-light {
+  background-color: #f1efe7;
+  #title {
+    color: #000;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+.hidden-content {
+  display: none;
+}
